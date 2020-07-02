@@ -1,0 +1,28 @@
+---
+postgresql_user: "postgres"
+postgresql_group: "postgres"
+postgresql_version: "12"
+postgresql_service_enabled: true
+postgresql_service_state: "started"
+postgresql_service_name: "postgresql"
+postgresql_listen_host: "localhost"
+postgresql_listen_port: "5432"
+postgresql_server_auth: []
+postgresql_server_auth_local: true
+postgresql_server_chown_datadir: false
+postgresql_data_dir: "/var/lib/postgresql/{{ postgresql_version }}/main"
+postgresql_bin_dir: "/usr/lib/postgresql/{{ postgresql_version }}/bin"
+postgresql_conf_dir: "/etc/postgresql/{{ postgresql_version }}/main"
+postgresql_pid_dir: "/var/run/postgresql/{{ postgresql_version}}-main.pid"
+postgresql_apt_key: "https://www.postgresql.org/media/keys/ACCC4CF8.asc"
+postgresql_apt_repository: "deb http://apt.postgresql.org/pub/repos/apt/ {{ ansible_distribution_release }}-pgdg main"
+postgresql_manage_repo: true
+postgresql_conf_state: true
+postgresql_templates_dir: "../templates"
+postgresql_config_files:
+  - pg_hba.conf
+  - postgresql.conf
+postgresql_packages:
+  - python-psycopg2
+  - postgresql-{{ postgresql_version }}
+  - postgresql-client-{{ postgresql_version }}
