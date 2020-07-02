@@ -1,5 +1,5 @@
 # Ansible Role for Postgresql
-![License](https://img.shields.io/github/license/mach1el/ansible-role-postgresql?color=orange&style=plastic)
+![Version](https://img.shields.io/github/v/release/mach1el/ansible-role-postgresql?color=red&style=plastic) ![License](https://img.shields.io/github/license/mach1el/ansible-role-postgresql?color=orange&style=plastic)
 
 Auto build,deploy Postgres database with ansible
 
