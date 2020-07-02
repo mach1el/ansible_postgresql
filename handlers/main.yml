@@ -1,0 +1,6 @@
+---
+- name: Restart PSQL
+  become: true
+  service:
+    name: "{{ postgresql_service_name }}.service"
+    state: restarted
