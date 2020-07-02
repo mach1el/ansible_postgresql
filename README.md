@@ -25,8 +25,8 @@ See [`default/main.yml`](https://github.com/mach1el/ansible-role-postgresql/blob
 ## Example playbook
   
     ---
-	  - name: Building kamailio for local server
+    - name: Building kamailio for local server
       hosts: local_server
-		  become: true
-		
-		  roles: - '../ansible-role-kamailio'
+      become: true
+     
+      roles: - '../ansible-role-kamailio'
