@@ -1,0 +1,31 @@
+---
+- name: PSQL | Set environment variables.
+  become: true
+  template:
+    src: postgres.sh.j2
+    dest: /etc/profile.d/postgres.sh
+    mode: 0644
+  notify: Restart PSQL
+
+- name: PSQL | Ensure data dir exist.
+  become: true
+  file:
+    path: "{{ postgresql_data_dir }}"
+    owner: "{{ postgresql_user }}"
+    group: "{{ postgresql_group }}"
+    state: directory
+    mode: 0700
+  when: postgresql_server_chown_datadir
+
+- name: PSQL | Check if initialized.
+  stat:
+    path: "{{ postgresql_data_dir }}/PG_VERSION"
+  register: pgdata_dir_version
+
+- name: PSQL | Ensure database is initialized.
+  become: true
+  become_user: "{{ postgresql_user }}"
+  command: "{{ postgresql_bin_dir }}/initdb -D {{ postgresql_data_dir }}"
+  when: not pgdata_dir_version.stat.exists
+  vars:
+    ansible_ssh_pipelining: true

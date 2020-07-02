@@ -1,0 +1,22 @@
+---
+- name: PGSQL | add key | apt
+  become: true
+  apt_key:
+    url: "{{ postgresql_apt_key }}"
+    state: present
+
+- name: PGSQL | add repository | apt
+  become: true
+  apt_repository:
+    repo: "{{ postgresql_apt_repository }}"
+    state: present
+
+- name: PGSQL | update repository | apt
+  apt: update_cache=yes
+  when: postgresql_manage_repo
+
+- name: PGSQL | install packages | apt
+  become: true
+  apt:
+    name: "{{ postgresql_packages }}"
+    state: present

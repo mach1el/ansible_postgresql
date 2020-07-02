@@ -1,0 +1,19 @@
+---
+- name: PSQL | Configure
+  become: true
+  become_user: "{{ postgresql_user }}" 
+  template:
+    src: "{{ postgresql_templates_dir }}/{{ item }}.j2"
+    dest: "{{ postgresql_conf_dir }}/{{ item }}"
+    owner: "{{ postgresql_user }}"
+    group: "{{ postgresql_group }}"
+    mode: 0600
+    backup: true
+  with_items: "{{ postgresql_config_files }}"
+  notify: Restart PSQL
+  when: postgresql_conf_state
+
+- name: PSQL | Set postgres password
+  postgresql_user: name={{ postgresql_user }} password=postgres
+  become: true
+  become_user: "{{ postgresql_user }}"
