@@ -8,19 +8,19 @@ See [`default/main.yml`](https://github.com/mach1el/ansible-role-postgresql/blob
 
 ## Role pathes
 
-├── defaults
-│   └── main.yml
-├── handlers
-│   └── main.yml
-├── tasks
-│   ├── configure.yml
-│   ├── initialize.yml
-│   ├── main.yml
-│   └── setup_debian.yml
-└── templates
-	  ├──  pg_hba.conf.j2
-   	├── postgresql.conf.j2
-   	└── postgres.sh.j2
+	├── defaults
+	│   └── main.yml
+	├── handlers
+	│   └── main.yml
+	├── tasks
+	│   ├── configure.yml
+	│   ├── initialize.yml
+	│   ├── main.yml
+	│   └── setup_debian.yml
+	└── templates
+        ├──  pg_hba.conf.j2
+        ├── postgresql.conf.j2
+        └── postgres.sh.j2
 
 ## Example playbook
 	---
