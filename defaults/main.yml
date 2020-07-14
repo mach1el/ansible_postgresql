@@ -8,21 +8,28 @@ postgresql_service_name: "postgresql"
 postgresql_listen_host: "localhost"
 postgresql_listen_port: "5432"
 postgresql_server_auth: []
+postgresql_conf_state: false
 postgresql_server_auth_local: true
-postgresql_server_chown_datadir: false
+postgresql_rhel_data: "/var/lib/pgsql/{{ postgresql_version }}/data"
+postgresql_rhel_bin: "/usr/pgsql-{{ postgresql_version }}/bin/postgresql-{{ postgresql_version }}-setup"
 postgresql_data_dir: "/var/lib/postgresql/{{ postgresql_version }}/main"
 postgresql_bin_dir: "/usr/lib/postgresql/{{ postgresql_version }}/bin"
 postgresql_conf_dir: "/etc/postgresql/{{ postgresql_version }}/main"
 postgresql_pid_dir: "/var/run/postgresql/{{ postgresql_version}}-main.pid"
 postgresql_apt_key: "https://www.postgresql.org/media/keys/ACCC4CF8.asc"
+postgresql_rhel7_repository: "https://download.postgresql.org/pub/repos/yum/reporpms/EL-7-x86_64/pgdg-redhat-repo-latest.noarch.rpm"
 postgresql_apt_repository: "deb http://apt.postgresql.org/pub/repos/apt/ {{ ansible_distribution_release }}-pgdg main"
-postgresql_manage_repo: true
-postgresql_conf_state: true
 postgresql_templates_dir: "../templates"
+postgresql_rhel_cfg_file: pg_hba.conf
 postgresql_config_files:
   - pg_hba.conf
   - postgresql.conf
-postgresql_packages:
+postgresql_debian_packages:
   - python-psycopg2
   - postgresql-{{ postgresql_version }}
   - postgresql-client-{{ postgresql_version }}
+postgresql_centos7_packages:
+  - python-psycopg2
+  - postgresql{{ postgresql_version }}
+  - postgresql{{ postgresql_version }}-server
+  - postgresql{{ postgresql_version }}-contrib
