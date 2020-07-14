@@ -1,0 +1,13 @@
+---
+- name: PGSQL | yum add repository.
+  become: true
+  yum:
+    name: "{{ postgresql_rhel7_repository }}"
+    state: present
+
+- name: PGSQL | yum instal packages.
+  become: true
+  yum:
+    name: "{{ postgresql_centos7_packages }}"
+    state: latest
+

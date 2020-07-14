@@ -1,31 +1,47 @@
 ---
-- name: PSQL | Set environment variables.
+- name: PGSQL | Set environment variables | debian.
   become: true
   template:
     src: postgres.sh.j2
     dest: /etc/profile.d/postgres.sh
     mode: 0644
-  notify: Restart PSQL
+  when: ansible_os_family == 'Debian'
+  notify: debian | Restart PGSQL
 
-- name: PSQL | Ensure data dir exist.
+- name: PGSQL | Set environment variables | centos.
   become: true
-  file:
-    path: "{{ postgresql_data_dir }}"
-    owner: "{{ postgresql_user }}"
-    group: "{{ postgresql_group }}"
-    state: directory
-    mode: 0700
-  when: postgresql_server_chown_datadir
+  template:
+    src: rhel_postgres.sh.j2
+    dest: /etc/profile.d/postgres.sh
+    mode: 0644
+  notify: centos | Restart PGSQL
+  when: ansible_distribution == 'CentOS'
 
-- name: PSQL | Check if initialized.
+- name: PGSQL | Check if database is initialized | debian.
+  become: true
   stat:
     path: "{{ postgresql_data_dir }}/PG_VERSION"
-  register: pgdata_dir_version
+  register: pgdata_debian_dir_version
+  when: ansible_os_family == 'Debian'
 
-- name: PSQL | Ensure database is initialized.
+- name: PGSQL | Check if database is initialized | centos.
+  become: true
+  stat:
+    path: "{{ postgresql_rhel_data }}/PG_VERSION"
+  register: pgdata_rhel_dir_version
+  when: ansible_distribution == 'CentOS'
+
+- name: PGSQL | Ensure database is initialized | debian.
   become: true
   become_user: "{{ postgresql_user }}"
   command: "{{ postgresql_bin_dir }}/initdb -D {{ postgresql_data_dir }}"
-  when: not pgdata_dir_version.stat.exists
+  when: ansible_os_family == 'Debian' and pgdata_debian_dir_version.stat.exists == 'False'
+  vars:
+    ansible_ssh_pipelining: true
+
+- name: PGSQL | Ensure database is initialized | rhel.
+  become: true
+  command: "{{ postgresql_rhel_bin }} initdb"
+  when: ansible_distribution == 'CentOS' and pgdata_rhel_dir_version.stat.exists == 'False'
   vars:
     ansible_ssh_pipelining: true

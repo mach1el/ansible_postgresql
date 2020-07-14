@@ -1,5 +1,5 @@
 ---
-- name: PSQL | Configure
+- name: PGSQL | configure | debian.
   become: true
   become_user: "{{ postgresql_user }}" 
   template:
@@ -10,10 +10,32 @@
     mode: 0600
     backup: true
   with_items: "{{ postgresql_config_files }}"
-  notify: Restart PSQL
-  when: postgresql_conf_state
+  notify: debian | Restart PGSQL
+  when: postgresql_conf_state and ansible_os_family == 'Debian'
 
-- name: PSQL | Set postgres password
+- name: PGSQL | configure | centos.
+  become: true
+  become_user: "{{ postgresql_user }}"
+  template:
+    src: "{{ postgresql_templates_dir }}/{{ item }}.rhel"
+    dest: "{{ postgresql_rhel_data }}/{{ item }}"
+    owner: "{{ postgresql_user }}"
+    group: "{{ postgresql_group }}"
+    mode: 0600
+    backup: true
+  with_items: 
+    - "{{ postgresql_rhel_cfg_file }}"
+  notify: centos | Restart PGSQL
+  when: ansible_distribution == 'CentOS'
+
+- name: PGSQL | trigger start service.
+  become: true
+  service:
+    name: "{{ postgresql_service_name }}-{{ postgresql_version }}.service"
+    state: started
+  when: ansible_distribution == 'CentOS'
+
+- name: PGSQL | Set postgres password
   postgresql_user: name={{ postgresql_user }} password=postgres
   become: true
   become_user: "{{ postgresql_user }}"

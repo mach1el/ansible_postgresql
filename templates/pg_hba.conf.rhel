@@ -1,0 +1,6 @@
+# TYPE  DATABASE        USER            ADDRESS                 METHOD
+{% if postgresql_server_auth_local %}
+local   all             all                                     peer
+host    all             all             127.0.0.1/32            md5
+host    all             all             ::1/128                 trust
+{% endif %}

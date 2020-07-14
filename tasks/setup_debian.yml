@@ -11,12 +11,9 @@
     repo: "{{ postgresql_apt_repository }}"
     state: present
 
-- name: PGSQL | update repository | apt
-  apt: update_cache=yes
-  when: postgresql_manage_repo
-
 - name: PGSQL | install packages | apt
   become: true
-  apt:
-    name: "{{ postgresql_packages }}"
+  apt: 
+    update_cache: yes
+    name: "{{ postgresql_debian_packages }}"
     state: present

@@ -1,12 +1,25 @@
 ---
-- import_tasks: setup_debian.yml
+- include_tasks: setup_debian.yml
   when: ansible_os_family == 'Debian'
+
+- include_tasks: setup_centos7.yml
+  when: ansible_distribution == "CentOS" and ansible_distribution_major_version > '6'
 
 - include_tasks: initialize.yml
 - include_tasks: configure.yml
 
-- name: PSQL | enable service.
+- name: PGSQL | enable service | debian.
+  become: true
   service:
     name: "{{ postgresql_service_name }}"
     state: "{{ postgresql_service_state }}"
     enabled: "{{ postgresql_service_enabled }}"
+  when: ansible_os_family == 'Debian'
+
+- name: PGSQL | enable service | rhel.
+  become: true
+  service:
+    name: "{{ postgresql_service_name }}-{{ postgresql_version }}"
+    state: "{{ postgresql_service_state }}"
+    enabled: "{{ postgresql_service_enabled }}"
+  when: ansible_distribution == 'CentOS'
