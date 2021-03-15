@@ -5,10 +5,10 @@ postgresql_version: "12"
 postgresql_service_enabled: true
 postgresql_service_state: "started"
 postgresql_service_name: "postgresql"
-postgresql_listen_host: "localhost"
+postgresql_listen_host: "{{ ansible_default_ipv4.address }}"
 postgresql_listen_port: "5432"
 postgresql_server_auth: []
-postgresql_conf_state: false
+postgresql_conf_state: true
 postgresql_server_auth_local: true
 postgresql_rhel_data: "/var/lib/pgsql/{{ postgresql_version }}/data"
 postgresql_rhel_bin: "/usr/pgsql-{{ postgresql_version }}/bin/postgresql-{{ postgresql_version }}-setup"
@@ -25,7 +25,9 @@ postgresql_config_files:
   - pg_hba.conf
   - postgresql.conf
 postgresql_debian_packages:
-  - python-psycopg2
+  - python-apt
+  # - python2-psycopg2
+  - python3-psycopg2
   - postgresql-{{ postgresql_version }}
   - postgresql-client-{{ postgresql_version }}
 postgresql_centos7_packages:

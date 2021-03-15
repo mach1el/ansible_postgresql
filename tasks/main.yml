@@ -8,6 +8,17 @@
 - include_tasks: initialize.yml
 - include_tasks: configure.yml
 
+- name: PGSQL | dotfile.
+  copy:
+    dest: /root/.pgpass
+    content: |
+      *:*:*:postgres:postgres
+
+- name: PGSQL | Give permissions.
+  ansible.builtin.file:
+    path: /root/.pgpass
+    mode: '0600'
+
 - name: PGSQL | enable service | debian.
   become: true
   service:
