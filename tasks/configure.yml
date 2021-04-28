@@ -3,13 +3,15 @@
   become: true
   become_user: "{{ postgresql_user }}" 
   template:
-    src: "{{ postgresql_templates_dir }}/{{ item }}.j2"
-    dest: "{{ postgresql_conf_dir }}/{{ item }}"
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
     owner: "{{ postgresql_user }}"
     group: "{{ postgresql_group }}"
     mode: 0600
     backup: true
-  with_items: "{{ postgresql_config_files }}"
+  with_items:
+    - {src: '../templates/pg_hba.conf.j2',dest: '/etc/postgresql/12/main/pg_hba.conf'}
+    - {src: '../templates/postgresql.conf.j2',dest: '/etc/postgresql/12/main/postgresql.conf'}
   notify: debian | Restart PGSQL
   when: postgresql_conf_state and ansible_os_family == 'Debian'
 
@@ -17,14 +19,15 @@
   become: true
   become_user: "{{ postgresql_user }}"
   template:
-    src: "{{ postgresql_templates_dir }}/{{ item }}.rhel"
-    dest: "{{ postgresql_rhel_data }}/{{ item }}"
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
     owner: "{{ postgresql_user }}"
     group: "{{ postgresql_group }}"
     mode: 0600
     backup: true
-  with_items: 
-    - "{{ postgresql_rhel_cfg_file }}"
+  with_items:
+    - {src: '../templates/pg_hba.conf.j2',dest: '/var/lib/pgsql/12/data/pg_hba.conf'}
+    - {src: '../templates/postgresql.conf.j2',dest: '/var/lib/pgsql/12/data/postgresql.conf'}
   notify: centos | Restart PGSQL
   when: ansible_distribution == 'CentOS'
 
