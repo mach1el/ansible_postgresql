@@ -21,10 +21,8 @@ postgresql_rhel7_repository: "https://download.postgresql.org/pub/repos/yum/repo
 postgresql_apt_repository: "deb http://apt.postgresql.org/pub/repos/apt/ {{ ansible_distribution_release }}-pgdg main"
 postgresql_templates_dir: "../templates"
 postgresql_rhel_cfg_file: pg_hba.conf
-postgresql_config_files:
-  - pg_hba.conf
-  - postgresql.conf
 postgresql_debian_packages:
+  - gpg
   - python-apt
   - python-psycopg2
   - python3-psycopg2
