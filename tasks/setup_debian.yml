@@ -1,4 +1,13 @@
 ---
+- name: PGSQL | install gpg | apt
+  become: true
+  apt:
+    update_cache: yes
+    name: 
+      - "gpg"
+      - "sudo"
+    state: present
+
 - name: PGSQL | add key | apt
   become: true
   apt_key:

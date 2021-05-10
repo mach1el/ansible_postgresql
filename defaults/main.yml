@@ -22,7 +22,6 @@ postgresql_apt_repository: "deb http://apt.postgresql.org/pub/repos/apt/ {{ ansi
 postgresql_templates_dir: "../templates"
 postgresql_rhel_cfg_file: pg_hba.conf
 postgresql_debian_packages:
-  - gpg
   - python-apt
   - python-psycopg2
   - python3-psycopg2

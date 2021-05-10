@@ -15,9 +15,7 @@
       *:*:*:postgres:postgres
 
 - name: PGSQL | Give permissions.
-  ansible.builtin.file:
-    path: /root/.pgpass
-    mode: '0600'
+  shell: "chmod 600 /root/.pgpass"
 
 - name: PGSQL | enable service | debian.
   become: true
@@ -33,4 +31,18 @@
     name: "{{ postgresql_service_name }}-{{ postgresql_version }}"
     state: "{{ postgresql_service_state }}"
     enabled: "{{ postgresql_service_enabled }}"
+  when: ansible_distribution == 'CentOS'
+
+- name: debian | Restart PGSQL
+  become: true
+  service:
+    name: "{{ postgresql_service_name }}.service"
+    state: restarted
+  when: ansible_os_family == 'Debian'
+
+- name: centos | Restart PGSQL
+  become: true
+  service:
+    name: "{{ postgresql_service_name }}-{{ postgresql_version }}.service"
+    state: restarted
   when: ansible_distribution == 'CentOS'

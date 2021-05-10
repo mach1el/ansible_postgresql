@@ -1,7 +1,6 @@
 ---
 - name: PGSQL | configure | debian.
   become: true
-  become_user: "{{ postgresql_user }}" 
   template:
     src: "{{ item.src }}"
     dest: "{{ item.dest }}"
@@ -17,7 +16,6 @@
 
 - name: PGSQL | configure | centos.
   become: true
-  become_user: "{{ postgresql_user }}"
   template:
     src: "{{ item.src }}"
     dest: "{{ item.dest }}"
